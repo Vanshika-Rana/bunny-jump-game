@@ -3,6 +3,7 @@ import Phaser from "../lib/phaser.js";
 export default class Game extends Phaser.Scene {
 	player;
 	platforms;
+	cursors;
 	constructor() {
 		super("game");
 	}
@@ -10,9 +11,10 @@ export default class Game extends Phaser.Scene {
 		this.load.image("background", "assets/bg_layer1.png");
 		this.load.image("platform", "assets/ground_grass.png");
 		this.load.image("bunny", "assets/bunny1_stand.png");
+		this.cursors = this.input.keyboard.createCursorKeys();
 	}
 	create() {
-		this.add.image(240, 320, "background");
+		this.add.image(240, 320, "background").setScrollFactor(1, 0);
 		this.platforms = this.physics.add.staticGroup();
 		for (let i = 0; i < 5; i++) {
 			const x = Phaser.Math.Between(80, 400);
@@ -32,12 +34,21 @@ export default class Game extends Phaser.Scene {
 		this.player.body.checkCollision.right = false;
 
 		this.cameras.main.startFollow(this.player);
+		this.cameras.main.setDeadzone(this.scale.width * 1.5);
 	}
 
-	update() {
+	update(t, dt) {
 		const touchingDown = this.player.body.touching.down;
 		if (touchingDown) {
 			this.player.setVelocityY(-300);
+		}
+
+		if (this.cursors.left.isDown && !touchingDown) {
+			this.player.setVelocityX(-200);
+		} else if (this.cursors.right.isDown && !touchingDown) {
+			this.player.setVelocityX(200);
+		} else {
+			this.player.setVelocityX(0);
 		}
 
 		this.platforms.children.iterate((child) => {
@@ -48,5 +59,15 @@ export default class Game extends Phaser.Scene {
 				platform.body.updateFromGameObject();
 			}
 		});
+		this.horizontalWrap(this.player);
+	}
+	horizontalWrap(sprite) {
+		const halfWidth = sprite.displayWidth * 0.5;
+		const gameWidth = this.scale.width;
+		if (sprite.x < -halfWidth) {
+			sprite.x = gameWidth + halfWidth;
+		} else if (sprite.x > gameWidth + halfWidth) {
+			sprite.x = -halfWidth;
+		}
 	}
 }
