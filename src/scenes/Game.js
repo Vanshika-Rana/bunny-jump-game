@@ -91,12 +91,17 @@ export default class Game extends Phaser.Scene {
 	addCarrotAbove(sprite) {
 		const y = sprite.y - sprite.displayHeight;
 		const carrot = this.carrots.get(sprite.x, y, "carrot");
+
+		carrot.setActive(true);
+		carrot.setVisible(true);
 		this.add.existing(carrot);
 		carrot.body.setSize(carrot.width, carrot.height);
+
+		this.physics.world.enable(carrot);
 		return carrot;
 	}
 	handleCollectCarrot(player, carrot) {
 		this.carrots.killAndHide(carrot);
-        this.physics.world.di
+		this.physics.world.disableBody(carrot.body);
 	}
 }
