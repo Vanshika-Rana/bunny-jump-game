@@ -69,7 +69,7 @@ export default class Game extends Phaser.Scene {
 	update(t, dt) {
 		const touchingDown = this.player.body.touching.down;
 		if (touchingDown) {
-			this.player.setVelocityY(-300);
+			this.player.setVelocityY(-350);
 			this.player.setTexture("bunny-jump");
 		}
 		const vy = this.player.body.velocity.y;
@@ -87,8 +87,8 @@ export default class Game extends Phaser.Scene {
 		this.platforms.children.iterate((child) => {
 			const platform = child;
 			const scrollY = this.cameras.main.scrollY;
-			if (platform.y >= scrollY + 700) {
-				platform.y = scrollY - Phaser.Math.Between(50, 100);
+			if (platform.y >= scrollY + 800) {
+				platform.y = scrollY - Phaser.Math.Between(50, 80);
 				platform.body.updateFromGameObject();
 
 				this.addCarrotAbove(platform);
@@ -98,7 +98,7 @@ export default class Game extends Phaser.Scene {
 
 		const bottomPlatform = this.getBottomMostPlatform();
 		if (this.player.y > bottomPlatform.y + 200) {
-			this.scene.start("game-over",{score:this.score});
+			this.scene.start("game-over", { score: this.score });
 		}
 	}
 	horizontalWrap(sprite) {
