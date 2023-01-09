@@ -5,7 +5,7 @@ export default class Game extends Phaser.Scene {
 	platforms;
 	cursors;
 	carrots;
-	score = 0;
+	score = -1;
 	scoreText;
 
 	constructor() {
@@ -114,6 +114,7 @@ export default class Game extends Phaser.Scene {
 		this.physics.world.disableBody(carrot.body);
 		this.score++;
 
-		//this.scoreText.setText("Carrots: " + score);
+		const value = `Carrots: ${this.score}`;
+		this.scoreText.text = value;
 	}
 }
