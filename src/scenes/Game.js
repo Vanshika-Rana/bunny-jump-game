@@ -5,6 +5,8 @@ export default class Game extends Phaser.Scene {
 	platforms;
 	cursors;
 	carrots;
+	score = 0;
+	scoreText;
 	constructor() {
 		super("game");
 	}
@@ -51,6 +53,12 @@ export default class Game extends Phaser.Scene {
 			undefined,
 			this
 		);
+
+		const style = { color: "#000", fontSize: "15px", fontWeight: "bold" };
+		this.scoreText = this.add
+			.text(240, 10, "Carrots: 0", style)
+			.setScrollFactor(0)
+			.setOrigin(0.5, 0);
 	}
 
 	update(t, dt) {
@@ -103,5 +111,8 @@ export default class Game extends Phaser.Scene {
 	handleCollectCarrot(player, carrot) {
 		this.carrots.killAndHide(carrot);
 		this.physics.world.disableBody(carrot.body);
+		this.score++;
+
+		//this.scoreText.setText("Carrots: " + score);
 	}
 }
