@@ -5,17 +5,21 @@ export default class Game extends Phaser.Scene {
 	platforms;
 	cursors;
 	carrots;
-	score = -1;
+	score;
 	scoreText;
 
 	constructor() {
 		super("game");
+	}
+	init() {
+		this.score = -1;
 	}
 	preload() {
 		this.load.image("background", "assets/bg_layer1.png");
 		this.load.image("platform", "assets/ground_grass.png");
 		this.load.image("bunny", "assets/bunny1_stand.png");
 		this.load.image("carrot", "assets/carrot.png");
+		this.load.image("bunny-jump", "assets/bunny1_jump.png");
 		this.cursors = this.input.keyboard.createCursorKeys();
 	}
 	create() {
@@ -66,8 +70,12 @@ export default class Game extends Phaser.Scene {
 		const touchingDown = this.player.body.touching.down;
 		if (touchingDown) {
 			this.player.setVelocityY(-300);
+			this.player.setTexture("bunny-jump");
 		}
-
+		const vy = this.player.body.velocity.y;
+		if (vy > 0 && this.player.texture.key != "bunny") {
+			this.player.setTexture("bunny");
+		}
 		if (this.cursors.left.isDown && !touchingDown) {
 			this.player.setVelocityX(-200);
 		} else if (this.cursors.right.isDown && !touchingDown) {
@@ -87,6 +95,11 @@ export default class Game extends Phaser.Scene {
 			}
 		});
 		this.horizontalWrap(this.player);
+
+		const bottomPlatform = this.getBottomMostPlatform();
+		if (this.player.y > bottomPlatform.y + 200) {
+			this.scene.start("game-over");
+		}
 	}
 	horizontalWrap(sprite) {
 		const halfWidth = sprite.displayWidth * 0.5;
@@ -116,5 +129,17 @@ export default class Game extends Phaser.Scene {
 
 		const value = `Carrots: ${this.score}`;
 		this.scoreText.text = value;
+	}
+	getBottomMostPlatform() {
+		const platforms = this.platforms.getChildren();
+		let bottomPlatform = platforms[0];
+		for (let i = 1; i < platforms.length; i++) {
+			const platform = platforms[i];
+			if (platform.y < bottomPlatform.y) {
+				continue;
+			}
+			bottomPlatform = platform;
+		}
+		return bottomPlatform;
 	}
 }
