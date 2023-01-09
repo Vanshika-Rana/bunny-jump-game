@@ -1,5 +1,11 @@
-*{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+body{
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 10, 29);
+}
+@font-face {
+  font-family: ArcadeClassic;
+  src: url('./assets/ArcadeClassic.ttf');
 }

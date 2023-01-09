@@ -27,7 +27,7 @@ export default class Game extends Phaser.Scene {
 		this.platforms = this.physics.add.staticGroup();
 		for (let i = 0; i < 5; i++) {
 			const x = Phaser.Math.Between(80, 400);
-			const y = 150 * i;
+			const y = 200 * i;
 			const platform = this.platforms.create(x, y, "platform");
 			platform.scale = 0.5;
 
@@ -59,9 +59,9 @@ export default class Game extends Phaser.Scene {
 			this
 		);
 
-		const style = { color: "#000", fontSize: "15px", fontWeight: "bold" };
+		const style = { color: "#fff", fontSize: "20px", fontWeight: "bold" };
 		this.scoreText = this.add
-			.text(240, 10, "Carrots: 0", style)
+			.text(600, 30, "Carrots: 0", style)
 			.setScrollFactor(0)
 			.setOrigin(0.5, 0);
 	}
@@ -98,7 +98,7 @@ export default class Game extends Phaser.Scene {
 
 		const bottomPlatform = this.getBottomMostPlatform();
 		if (this.player.y > bottomPlatform.y + 200) {
-			this.scene.start("game-over");
+			this.scene.start("game-over",{score:this.score});
 		}
 	}
 	horizontalWrap(sprite) {
