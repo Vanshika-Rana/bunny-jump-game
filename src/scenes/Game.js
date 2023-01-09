@@ -69,7 +69,7 @@ export default class Game extends Phaser.Scene {
 	update(t, dt) {
 		const touchingDown = this.player.body.touching.down;
 		if (touchingDown) {
-			this.player.setVelocityY(-350);
+			this.player.setVelocityY(-380);
 			this.player.setTexture("bunny-jump");
 		}
 		const vy = this.player.body.velocity.y;
@@ -88,7 +88,7 @@ export default class Game extends Phaser.Scene {
 			const platform = child;
 			const scrollY = this.cameras.main.scrollY;
 			if (platform.y >= scrollY + 800) {
-				platform.y = scrollY - Phaser.Math.Between(50, 80);
+				platform.y = scrollY - Phaser.Math.Between(50, 130);
 				platform.body.updateFromGameObject();
 
 				this.addCarrotAbove(platform);
