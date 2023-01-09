@@ -7,6 +7,7 @@ export default class Game extends Phaser.Scene {
 	carrots;
 	score = 0;
 	scoreText;
+
 	constructor() {
 		super("game");
 	}
